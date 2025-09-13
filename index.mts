@@ -1,11 +1,24 @@
+import "dotenv/config";
+
 import {ChatOpenAI} from "@langchain/openai";
 import { TavilySearchAPIRetriever } from "@langchain/community/retrievers/tavily_search_api";
 import {createReactAgent} from "@langchain/langgraph/prebuilt";
-import {TavilySearch, TavilySearchAPIWrapper} from "@langchain/tavily";
+import {TavilySearch} from "@langchain/tavily";
 import { MemorySaver } from "@langchain/langgraph";
 import {HumanMessage} from "@langchain/core/messages";
 
+const TAVILY_KEY = process.env.TAVILY_API_KEY;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
+const retriever = new TavilySearchAPIRetriever({
+  k: 3,
+  apiKey: TAVILY_KEY
+});
+
+const tools = new TavilySearch({
+  maxResults: 1,
+  tavilyApiKey:  TAVILY_KEY
+})
 const agentModel = new ChatOpenAI({ temperature: 0, model: "gpt-3.5-turbo", apiKey: OPENAI_API_KEY})
 
 const res = await tools.invoke({
