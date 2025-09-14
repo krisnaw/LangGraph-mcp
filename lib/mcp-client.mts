@@ -4,6 +4,7 @@ import { MultiServerMCPClient } from "@langchain/mcp-adapters";
 const SUPABASE_TOKEN = process.env.SUPABASE_TOKEN;
 const SUPABASE_PROJECT_ID = process.env.SUPABASE_PROJECT_ID;
 
+
 export const mcpClient = (async () => {
 
   let client : MultiServerMCPClient  | null = null;
@@ -23,7 +24,7 @@ export const mcpClient = (async () => {
               "-y",
               "@supabase/mcp-server-supabase",
               "--read-only",
-              `--project-ref=${SUPABASE_PROJECT_ID}`
+              `--project-ref=${SUPABASE_PROJECT_ID!}`
             ],
             env: {
               SUPABASE_ACCESS_TOKEN: SUPABASE_TOKEN!
@@ -48,6 +49,8 @@ export const mcpClient = (async () => {
   if (client) {
     try {
       mcpTools = await client.getTools();
+
+      console.log("mcpTools successfully loaded");
     } catch (error) {
       console.error(error);
       mcpTools = null;

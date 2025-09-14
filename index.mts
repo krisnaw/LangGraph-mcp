@@ -14,12 +14,8 @@ console.log(mcpTools);
 
 
 const TAVILY_KEY = process.env.TAVILY_API_KEY;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPENAI_API_KEY = "process.env.OPENAI_API_KEY"
 
-const retriever = new TavilySearchAPIRetriever({
-  k: 3,
-  apiKey: TAVILY_KEY
-});
 
 const tools = new TavilySearch({
   maxResults: 1,
@@ -31,21 +27,23 @@ const agentModel = new ChatOpenAI({ temperature: 0, model: "gpt-3.5-turbo", apiK
 const agentCheckpointer = new MemorySaver();
 const agent = createReactAgent({
   llm: agentModel,
-  tools: [tools, mcpTools],
+  tools: mcpTools,
   checkpointSaver: agentCheckpointer
 })
 
 
-const agentFinalState = await agent.invoke(
-  { messages: [new HumanMessage("Who is from Ireland?")] },
-  { configurable: { thread_id: "42" } },
+const getnFirstState = await agent.invoke(
+  { messages: [new HumanMessage("select * from public.profiles")] },
+  { configurable: { thread_id: "41" } },
 );
 
 
-console.log(agentFinalState.messages);
+const agentNextState = await agent.invoke(
+  { messages: [new HumanMessage("select * from public.profiles")] },
+  { configurable: { thread_id: "41" } },
+);
 
 
-console.log(await agentFinalState.messages[agentFinalState.messages.length - 1].content)
 
 
 
