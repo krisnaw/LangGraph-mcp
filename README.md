@@ -1,15 +1,10 @@
 # Langi - LangGraph Prompt Chain Examples
 
-A demonstration application showcasing different prompt chain patterns using LangGraph, OpenAI, and Supabase MCP (Model Context Protocol) tools.
+A demonstration application showcasing a simple prompt chain pattern using LangGraph, OpenAI, and Supabase MCP (Model Context Protocol) tools.
 
 ## 🚀 Overview
 
-This application demonstrates how to create sophisticated prompt chains with multiple agent states using LangGraph. It includes several examples showing different patterns for chaining AI agent interactions:
-
-- **Simple Prompt Chains**: Basic two-state chains with context preservation
-- **Sequential Chains**: Independent agent states with different threads
-- **Conditional Chains**: Dynamic branching based on previous results
-- **Advanced State Management**: Sophisticated state tracking and organization
+This application serves as a Proof of Concept (PoC) to demonstrate how to build an AI Agent using LangGraph. It showcases the integration of a Supabase MCP server as a data source and leverages OpenAI's LLM for the agent's reasoning capabilities. The primary goal is to illustrate a simple, yet powerful, implementation of a prompt chain that can interact with a database and perform tasks based on the retrieved data.
 
 ## ⚙️ Setup
 
@@ -71,7 +66,6 @@ This runs the main `index.mts` file which demonstrates a basic three-step prompt
 - **OpenAI GPT-3.5-turbo**: Language model for agent reasoning
 - **Supabase MCP Tools**: Database interaction through Model Context Protocol
 - **Memory Management**: Persistent conversation state with `MemorySaver`
-- **Multiple Chain Patterns**: Four different implementation approaches
 - **TypeScript Support**: Full TypeScript implementation with proper types
 
 ## 📋 Prerequisites
@@ -88,25 +82,13 @@ Before running this application, ensure you have:
 
 ## 🧪 Testing the Application
 
-The application provides multiple ways to test different prompt chain patterns:
+The application provides a way to test the simple prompt chain pattern:
 
-### Individual Component Testing
-
-#### 1. Simple Prompt Chain
+### Simple Prompt Chain
 ```bash
 npm run simple
 ```
 Tests a basic two-state prompt chain with context preservation.
-
-#### 2. Advanced Prompt Chains
-```bash
-npm run chains
-```
-Runs all four advanced prompt chain examples:
-- Simple Chain
-- Sequential Chain
-- Conditional Chain
-- Advanced Chain with State Management
 
 ## 📊 Understanding the Examples
 
@@ -131,27 +113,6 @@ const secondState = await agent.invoke(
 - Maintains conversation context
 - Passes data between states
 
-### 2. Advanced Prompt Chains (`prompt-chains.mts`)
-
-#### Pattern 1: Simple Chain
-- Two states with context preservation
-- Data retrieval followed by analysis
-
-#### Pattern 2: Sequential Chain
-- Independent threads for each state
-- No context sharing between states
-- Good for parallel processing
-
-#### Pattern 3: Conditional Chain
-- Dynamic branching based on results
-- Data validation before processing
-- Implements business logic
-
-#### Pattern 4: Advanced State Management
-- Custom state management class
-- Tracks all states and results
-- Better organization and debugging
-
 ## 🔍 Expected Output
 
 When running the application, you should see output similar to:
@@ -174,7 +135,6 @@ Second State Result: [AI analysis of the data with insights]
 
 - `npm run dev` - Run the main application (index.mts)
 - `npm run simple` - Run simple prompt chain example
-- `npm run chains` - Run all advanced prompt chain examples
 - `npm test` - Currently shows placeholder message
 
 ## 🏗️ Project Structure
@@ -183,10 +143,8 @@ Second State Result: [AI analysis of the data with insights]
 langi/
 ├── index.mts                 # Main application entry point
 ├── simple-prompt-chain.mts   # Simple two-state chain example
-├── prompt-chains.mts         # Advanced chain patterns
 ├── lib/
 │   └── mcp-client.mts       # MCP client configuration
-├── prompt-chain-examples.md  # Implementation guide
 ├── package.json             # Dependencies and scripts
 └── README.md               # This file
 ```
@@ -219,41 +177,6 @@ Add console logging to see detailed execution flow:
 
 ```typescript
 console.log("Available MCP Tools:", mcpTools?.map((tool: any) => tool.name) || []);
-```
-
-## 🚀 Advanced Usage
-
-### Custom Chain Implementation
-
-Create your own prompt chain by following the patterns in `prompt-chains.mts`:
-
-```typescript
-async function myCustomChain() {
-  const threadId = "custom-" + Date.now();
-  
-  // Your custom logic here
-  const state1 = await agent.invoke(
-    { messages: [new HumanMessage("your prompt")] },
-    { configurable: { thread_id: threadId } }
-  );
-  
-  // Continue with additional states...
-}
-```
-
-### Adding New MCP Tools
-
-Extend the MCP client in `lib/mcp-client.mts` to include additional tools:
-
-```typescript
-mcpServers: {
-  supabase: { /* existing config */ },
-  yourTool: {
-    command: "your-command",
-    args: ["your-args"],
-    env: { YOUR_ENV_VAR: "value" }
-  }
-}
 ```
 
 ## 📚 Additional Resources
