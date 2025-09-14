@@ -10,12 +10,8 @@ import { mcpClient } from "./lib/mcp-client.mjs";
 
 const { client, mcpTools } = await mcpClient()
 
-console.log(mcpTools);
-
-
 const TAVILY_KEY = process.env.TAVILY_API_KEY;
-const OPENAI_API_KEY = "process.env.OPENAI_API_KEY"
-
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 const tools = new TavilySearch({
   maxResults: 1,
@@ -31,26 +27,33 @@ const agent = createReactAgent({
   checkpointSaver: agentCheckpointer
 })
 
-
-const getnFirstState = await agent.invoke(
+const firstState = await agent.invoke(
   { messages: [new HumanMessage("select * from public.profiles")] },
   { configurable: { thread_id: "41" } },
 );
 
+const firstResponse = firstState.messages[firstState.messages.length - 1].content;
 
-const agentNextState = await agent.invoke(
-  { messages: [new HumanMessage("select * from public.profiles")] },
+const analysisPrompt = `Based on the previous query results, please analyze the data and provide insights. 
+    Previous result: ${firstResponse}
+    
+    Please provide:
+    1. Summary of the data structure
+    2. Key observations
+    3. Any patterns or trends you notice`;
+
+const secondState = await agent.invoke(
+  { messages: [new HumanMessage(analysisPrompt)] },
   { configurable: { thread_id: "41" } },
 );
 
+const secondResponse = secondState.messages[secondState.messages.length - 1].content;
 
+const thirdState = await agent.invoke(
+  { messages: [new HumanMessage("who is from ireland?")] },
+  { configurable: { thread_id: "41" } },
+);
 
+const thirdResponse = thirdState.messages[thirdState.messages.length - 1].content;
+console.log(thirdResponse);
 
-
-// const agentNextState = await agent.invoke(
-//   { messages: [new HumanMessage("what about ny")] },
-//   { configurable: { thread_id: "42" } },
-// );
-// console.log(
-//   agentNextState.messages[agentNextState.messages.length - 1].content,
-// );
