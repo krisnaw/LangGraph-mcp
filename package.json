@@ -17,6 +17,7 @@
     "@langchain/mcp-adapters": "^0.6.0",
     "@langchain/openai": "^0.6.11",
     "@langchain/tavily": "^0.1.5",
-    "dotenv": "^17.2.2"
+    "dotenv": "^17.2.2",
+    "yargs-parser": "^22.0.0"
   }
 }
